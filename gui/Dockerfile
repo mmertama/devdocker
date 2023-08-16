@@ -63,6 +63,9 @@ RUN     pip install setuptools
 
 # For Qt Installer
 RUN apt-get install -y libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0
+# For Qt 
+RUN apt-get install -y libxcb-cursor0
+
 
 # Gempyre-Python using scikit-build for pip
 RUN pip install scikit-build
