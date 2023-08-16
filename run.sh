@@ -63,53 +63,13 @@ if (( $BUILD )); then
 	popd
 fi
 
-#dock_gid=1024
-#dock_g_name=$(getent group "$dock_gid" | cut -d: -f1)
-
-#if [ -z "$dock_g_name" ]; then
-#    	sudo addgroup --gid 1024  dock_dev
-#fi
-
-#if ! groups "$USER" | grep &>/dev/null "\bdock_dev\b"; then
-#	sudo usermod -aG dock_dev $USER
-#fi
-
-
 mkdir -p development
-#if [[ $(stat -c %g development) != "$dock_gid" ]]; then
-#    	sudo chown :docker development
-#fi
-
-#if [[ $USER!="root" ]]; then
-#	dev_p=$(stat -c '%a' development)
-#	chmod a+rw development
-#fi	
-
-#MYADDR=$(ip route get 8.8.8.8 | sed -n '/src/{s/.*src *\([^ ]*\).*/\1/p;q}')
-#x11docker --name devdocker -v $(pwd)/development:/home/$USER/development  devdocker
-#xhost +
-#docker run -it --rm --user $(id -u):$(id -g) --name devdocker --volume $(pwd)/development:/home/$USER/development devdocker
-#docker run -it --rm -v $HOME/.Xauthority:$HOME/.Xauthority --net=host -e DISPLAY=$MYADDR$DISPLAY --name devdocker --volume $(pwd)/development:/home/$USER/development  devdocker
 
 if [[ $MODE == "gui" ]]; then
 	docker run --privileged -it --rm --name $IMAGE_NAME-$MODE --volume $SHARE:$SHARED -v $HOME/.Xauthority:$HOME/.Xauthority --net=host -e DISPLAY=$DISPLAY $IMAGE_NAME:$MODE
-	# x11docker --desktop --debug --hostdisplay --size=1280x1024 devdocker_$MODE:basic
-	#--name devdocker_$MODE -v $(pwd)/development:/home/$USER/development devdocker_$MODE
 fi
 
 if [[ $MODE == "cli" ]]; then
 	docker run -it --rm --name $IMAGE_NAME-$MODE --volume $SHARE:$SHARED $IMAGE_NAME:$MODE
 fi
 
-#docker exec --user root devdocker chown :dock_dev /home/$USER/development
-#docker exec --user root devdocker chgrp dock_dev /home/$USER/development
-#xhost -
-
-#if [[ $USER!="root" ]]; then
-#	chmod $dev_p development
-#fi
-
-#docker exec -it devdocker lsattr /home/markus/development
-#docker attach devdocker
-#docker stop devdocker
-#docker rm -f devdocker
