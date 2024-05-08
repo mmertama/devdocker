@@ -13,6 +13,7 @@ RUN	    apt-get -y update && apt-get -y install build-essential software-propert
 
 # basic tools
 RUN	    apt-get -y install git nano vim unzip curl wget jq openssl libssl-dev procps file xz-utils
+RUN     apt-get -y install ninja-build
 
 # X 11 apps
 RUN     apt-get install -y x11-apps

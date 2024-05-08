@@ -2,6 +2,7 @@
 Docker containers for software development
 
 Usage:
+* run.sh [gui|cli] [build] [engine|desktop] (defaults to gui and engine)
 * Install a Docker engine (Docker Desktop is not working with gui apps as we speak)
 * Clone or 'update' (see below) devdocker - possibly rename (the docker image name is based on folder name, i.e. default devdocker).
 * $ ./run.sh [cli|gui] build  - cli for command line only, gui for Ui.

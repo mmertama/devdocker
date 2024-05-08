@@ -36,6 +36,15 @@ SHARE=$(pwd)/development
 SHARED=/home/$DOCKER_USER/$(basename $SHARE)
 echo share "$SHARE" as "$SHARED"
 
+PLATFORM=$(uname)
+UNIX=1
+if [[ ! "$PLATFORM" == 'Linux' ||  "$PLATFORM" == 'FreeBSD' ]]; then
+	echo "Not a *NIX, falls to Desktop Docker with cli"
+	ENGINE=0
+	MODE="cli"
+	UNIX=0
+fi
+
 if (( $ENGINE == 0)); then
 	echo "WARNING:  For Docker Desktop the shared folder has to have a+rw permissions"
 	if [[ $MODE == "gui" ]]; then
