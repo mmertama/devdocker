@@ -12,7 +12,7 @@ RUN	    apt-get -y update && apt-get -y install build-essential software-propert
 
 # basic tools
 RUN	    apt-get -y install git nano vim unzip curl wget jq openssl libssl-dev procps file xz-utils
-RUN     apt-get -y install ninja-build
+RUN     apt-get -y install ninja-build gpg
 
 
 # python
@@ -27,10 +27,13 @@ RUN	    update-alternatives --set python3 /usr/bin/python${SYS_PY_VER}
 
 
 # cmake
-RUN     curl -sSL https://github.com/Kitware/CMake/releases/download/v3.27.2/cmake-3.27.2-linux-x86_64.sh -o /tmp/cmake.sh
-RUN     chmod a+x /tmp/cmake.sh && mkdir /usr/local/bin/cmake3.27
-RUN     /tmp/cmake.sh --skip-license --prefix=/usr/local/bin/cmake3.27 && ln -s /usr/local/bin/cmake3.27/bin/* /usr/bin
-
+RUN     wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
+        | gpg --dearmor - \
+        | tee /usr/share/keyrings/kitware-archive-keyring.gpg > /dev/null
+RUN     echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main' \
+        | tee /etc/apt/sources.list.d/kitware.list > /dev/null
+RUN     apt-get update && apt-get install kitware-archive-keyring && rm /usr/share/keyrings/kitware-archive-keyring.gpg
+RUN     apt-get -y install cmake
 
 # pip
 RUN     apt-get -y install python3-distutils python3-virtualenv
