@@ -41,18 +41,10 @@ RUN     curl -sS https://bootstrap.pypa.io/get-pip.py | python${PY_VER}
 ARG     CLANG_VER=19
 RUN     wget https://apt.llvm.org/llvm.sh
 RUN     chmod u+x llvm.sh && ./llvm.sh ${CLANG_VER} && rm llvm.sh
-#RUN     wget https://raw.githubusercontent.com/ShangjinTang/dotfiles/05ef87daae29475244c276db5d406b58c52be445/linux/ubuntu/22.04/bin/update-alternatives-clang
-#RUN     /bin/bash ./update-alternatives-clang ${CLANG_VER} && rm update-alternatives-clang  
 
 
 # emscripten
-# emscripten version, latest may not be compatible and I prefer explicit, either use compatible version or change to build
-ARG   EMSDK_VER=latest
-RUN   mkdir -p /opt/src \
-        && cd /opt/src \ 
-        && git clone https://github.com/emscripten-core/emsdk.git \
-        && chmod -R a+rwX emsdk 
-
+RUN      apt-get -y install emscripten
 
 # install sudo
 RUN	    apt-get -y install sudo
@@ -64,17 +56,9 @@ RUN     usermod -aG docker $DEFAULT_USER
 RUN	    usermod -aG sudo $DEFAULT_USER
 RUN	    echo "$DEFAULT_USER:docker" | chpasswd
 
-RUN     cd /opt/src/emsdk \
-        && ./emsdk install ${EMSDK_VER}  \
-        && ./emsdk activate ${EMSDK_VER} 
 
 RUN     echo 'export PATH=/usr/lib/llvm-19/bin:$PATH' >> /home/${DEFAULT_USER}/.bashrc
-RUN     echo 'pushd /opt/src/emsdk && source ./emsdk_env.sh && popd' >> /home/${DEFAULT_USER}/.bashrc
-RUN     echo 'export EM_CONFIG=$HOME/development/.emscripten' >> /home/${DEFAULT_USER}/.bashrc
 RUN     echo 'export LLVM_ROOT=/usr/lib/llvm-19/bin'  >> /home/${DEFAULT_USER}/.bashrc
-RUN     echo 'if [ ! -f $HOME/development/.emscripten ]; then\n emcc --generate-config\nfi' >> /home/${DEFAULT_USER}/.bashrc
-
-
 
 USER    $DEFAULT_USER
 
